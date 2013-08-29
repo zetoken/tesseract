@@ -70,7 +70,6 @@
     <Compile Include="ImageFormat.cs" />
     <Compile Include="Interop\BaseApi.cs" />
     <Compile Include="Interop\Constants.cs" />
-    <Compile Include="Interop\WindowsLibraryLoader.cs" />
     <Compile Include="Interop\LeptonicaApi.cs" />
     <Compile Include="Interop\MarshalHelper.cs" />
     <Compile Include="LeptonicaException.cs" />

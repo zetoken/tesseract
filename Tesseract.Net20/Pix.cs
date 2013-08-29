@@ -26,7 +26,6 @@ namespace Tesseract
 
         #endregion
 
-
         #region Create\Load methods
 
         public static Pix Create(int width, int height, int depth)
@@ -36,7 +35,7 @@ namespace Tesseract
 
             if (width <= 0) throw new ArgumentException("Width must be greater than zero", "width");
             if (height <= 0) throw new ArgumentException("Height must be greater than zero", "height");
-            
+
             var handle = Interop.LeptonicaApi.pixCreate(width, height, depth);
             if (handle == IntPtr.Zero) throw new InvalidOperationException("Failed to create pix, this normally occurs because the requested image size is too large, please check Standard Error Output.");
 
@@ -53,12 +52,13 @@ namespace Tesseract
         public static Pix LoadFromFile(string filename)
         {
             var pixHandle = Interop.LeptonicaApi.pixRead(filename);
-            if (pixHandle == IntPtr.Zero) {
+            if (pixHandle == IntPtr.Zero)
+            {
                 throw new IOException(String.Format("Failed to load image '{0}'.", filename));
             }
             return Create(pixHandle);
         }
-        
+
         /// <summary>
         /// Creates a new pix instance using an existing handle to a pix structure.
         /// </summary>
@@ -76,7 +76,8 @@ namespace Tesseract
             this.depth = Interop.LeptonicaApi.pixGetDepth(handle);
 
             var colorMapHandle = Interop.LeptonicaApi.pixGetColormap(handle);
-            if (colorMapHandle != IntPtr.Zero) {
+            if (colorMapHandle != IntPtr.Zero)
+            {
                 this.colormap = new PixColormap(colorMapHandle);
             }
         }
@@ -90,12 +91,17 @@ namespace Tesseract
             get { return colormap; }
             set
             {
-                if (value != null) {
-                    if (Interop.LeptonicaApi.pixSetColormap(Handle, value.Handle) == 0) {
+                if (value != null)
+                {
+                    if (Interop.LeptonicaApi.pixSetColormap(Handle, value.Handle) == 0)
+                    {
                         colormap = value;
                     }
-                } else {
-                    if (Interop.LeptonicaApi.pixDestroyColormap(Handle) == 0) {
+                }
+                else
+                {
+                    if (Interop.LeptonicaApi.pixDestroyColormap(Handle) == 0)
+                    {
                         colormap = null;
                     }
                 }
@@ -117,11 +123,6 @@ namespace Tesseract
             get { return depth; }
         }
 
-        public PixData GetData()
-        {
-            return new PixData(this);
-        }
-
         public IntPtr Handle
         {
             get { return handle; }
@@ -131,10 +132,33 @@ namespace Tesseract
 
         #region Methods
 
+        /// <summary>
+        /// X resolution
+        /// </summary>
+        /// <returns></returns>
+        public int GetXRes()
+        {
+            return Interop.LeptonicaApi.pixGetXRes(handle);
+        }
+
+        /// <summary>
+        /// Y resolution
+        /// </summary>
+        /// <returns></returns>
+        public int GetYRes()
+        {
+            return Interop.LeptonicaApi.pixGetYRes(handle);
+        }
+
+        public PixData GetData()
+        {
+            return new PixData(this);
+        }
 
         public void Save(string filename, ImageFormat format = ImageFormat.Default)
         {
-            if (Interop.LeptonicaApi.pixWrite(filename, handle, format) != 0) {
+            if (Interop.LeptonicaApi.pixWrite(filename, handle, format) != 0)
+            {
                 throw new IOException(String.Format("Failed to save image '{0}'.", filename));
             }
         }
@@ -246,6 +270,5 @@ namespace Tesseract
         }
 
         #endregion
-
     }
 }

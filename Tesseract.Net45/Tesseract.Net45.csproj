@@ -86,9 +86,6 @@
     <Compile Include="..\Tesseract.Net20\Interop\MarshalHelper.cs">
       <Link>Interop\MarshalHelper.cs</Link>
     </Compile>
-    <Compile Include="..\Tesseract.Net20\Interop\WindowsLibraryLoader.cs">
-      <Link>Interop\WindowsLibraryLoader.cs</Link>
-    </Compile>
     <Compile Include="..\Tesseract.Net20\LoadLibraryException.cs">
       <Link>LoadLibraryException.cs</Link>
     </Compile>
