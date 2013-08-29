@@ -19,10 +19,6 @@ namespace Tesseract.Interop
 
         static TessApi()
         {
-            // first load liblept as tesseract depends on it.
-            WindowsLibraryLoader.Instance.LoadLibrary(Constants.LeptonicaDllName);
-            // now load unmanaged tesseract dll.
-            WindowsLibraryLoader.Instance.LoadLibrary(Constants.TesseractDllName);
         }
 
 		// Helper functions

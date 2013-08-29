@@ -9,12 +9,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("TesseractOcr")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Tesseract OCR Wrapper")]
+[assembly: AssemblyDescription("Fork by ZeToken")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("TesseractOcr")]
-[assembly: AssemblyCopyright("Copyright 2012")]
+[assembly: AssemblyProduct("Tesseract OCR Wrapper")]
+[assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -26,5 +26,5 @@ using System.Runtime.InteropServices;
 //
 // Major.Minor.Patch
 
-[assembly: AssemblyVersion("0.1.0")]
-[assembly: AssemblyFileVersion("0.1.0")]
+[assembly: AssemblyVersion("0.2")]
+[assembly: AssemblyFileVersion("0.2.0")]
