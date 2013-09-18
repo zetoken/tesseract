@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Tesseract;
+using Tesseract.Wrapper;
 
 namespace BaseApiTester
 {
@@ -21,7 +22,7 @@ namespace BaseApiTester
 			try {
                 var logger = new FormattedConsoleLogger();
                 var resultPrinter = new ResultPrinter(logger);
-                using (var engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default)) {
+                using (var engine = new TesseractEngine(@"./tessdata", "fra", EngineMode.Default)) {
                     using (var img = Pix.LoadFromFile(testImagePath)) {
                         using (logger.Begin("Process image")) {
                             var i = 1;

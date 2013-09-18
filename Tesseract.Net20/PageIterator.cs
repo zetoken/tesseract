@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Tesseract.Wrapper;
 
 namespace Tesseract
 {
@@ -25,7 +26,7 @@ namespace Tesseract
         /// </summary>
         public void Begin()
         {
-            Interop.TessApi.PageIteratorBegin(handle);
+            TesseractPrimitives.Api.PageIteratorBegin(handle);
         }
 
         /// <summary>
@@ -38,7 +39,7 @@ namespace Tesseract
         /// <returns></returns>
         public bool Next(PageIteratorLevel level)
         {
-            return Interop.TessApi.PageIteratorNext(handle, level) != 0;
+            return TesseractPrimitives.Api.PageIteratorNext(handle, level) != 0;
         }
 
         /// <summary>
@@ -67,7 +68,7 @@ namespace Tesseract
         /// <returns></returns>
         public bool IsAtBeginningOf(PageIteratorLevel level)
         {
-            return Interop.TessApi.PageIteratorIsAtBeginningOf(handle, level) != 0;
+            return TesseractPrimitives.Api.PageIteratorIsAtBeginningOf(handle, level) != 0;
         }
 
         /// <summary>
@@ -78,22 +79,22 @@ namespace Tesseract
         /// <returns></returns>
         public bool IsAtFinalOf(PageIteratorLevel level, PageIteratorLevel element)
         {
-            return Interop.TessApi.PageIteratorIsAtFinalElement(handle, level, element) != 0;
+            return TesseractPrimitives.Api.PageIteratorIsAtFinalElement(handle, level, element) != 0;
         }
 
         public PolyBlockType BlockType
         {
-            get { return Interop.TessApi.PageIteratorBlockType(handle); }
+            get { return TesseractPrimitives.Api.PageIteratorBlockType(handle); }
         }
 
         public Pix GetBinaryImage(PageIteratorLevel level)
         {
-            return Pix.Create(Interop.TessApi.PageIteratorGetBinaryImage(handle, level));
+            return Pix.Create(TesseractPrimitives.Api.PageIteratorGetBinaryImage(handle, level));
         }
 
         public Pix GetImage(PageIteratorLevel level, int padding, out int x, out int y)
         {
-            return Pix.Create(Interop.TessApi.PageIteratorGetImage(handle, level, padding, out x, out y));
+            return Pix.Create(TesseractPrimitives.Api.PageIteratorGetImage(handle, level, padding, out x, out y));
         }
 
         /// <summary>
@@ -105,7 +106,8 @@ namespace Tesseract
         public bool TryGetBoundingBox(PageIteratorLevel level, out Rect bounds)
         {
             int x1, y1, x2, y2;
-            if (Interop.TessApi.PageIteratorBoundingBox(handle, level, out x1, out y1, out x2, out y2) != 0) {
+            if (TesseractPrimitives.Api.PageIteratorBoundingBox(handle, level, out x1, out y1, out x2, out y2) != 0)
+            {
                 bounds = Rect.FromCoords(x1, y1, x2, y2);
                 return true;
             } else {
@@ -126,7 +128,8 @@ namespace Tesseract
         public bool TryGetBaseline(PageIteratorLevel level, out Rect bounds)
         {
             int x1, y1, x2, y2;
-            if (Interop.TessApi.PageIteratorBaseline(handle, level, out x1, out y1, out x2, out y2) != 0) {
+            if (TesseractPrimitives.Api.PageIteratorBaseline(handle, level, out x1, out y1, out x2, out y2) != 0)
+            {
                 bounds = Rect.FromCoords(x1, y1, x2, y2);
                 return true;
             } else {
@@ -144,7 +147,7 @@ namespace Tesseract
             WritingDirection writing_direction;
             TextLineOrder textLineOrder;
             float deskew_angle;
-            Interop.TessApi.PageIteratorOrientation(handle, out orientation, out writing_direction, out textLineOrder, out deskew_angle);
+            TesseractPrimitives.Api.PageIteratorOrientation(handle, out orientation, out writing_direction, out textLineOrder, out deskew_angle);
 
             return new ElementProperties(orientation, textLineOrder, writing_direction, deskew_angle);
         }
@@ -152,7 +155,7 @@ namespace Tesseract
 
         protected override void Dispose(bool disposing)
         {
-            Interop.TessApi.PageIteratorDelete(handle);
+            TesseractPrimitives.Api.PageIteratorDelete(handle);
         }
     }
 }

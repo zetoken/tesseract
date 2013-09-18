@@ -1,4 +1,5 @@
 ﻿using System;
+using Tesseract.Wrapper;
 
 namespace Tesseract
 {
@@ -11,12 +12,12 @@ namespace Tesseract
 
         public float GetConfidence(PageIteratorLevel level)
         {
-            return Interop.TessApi.ResultIteratorGetConfidence(handle, level);
+            return TesseractPrimitives.Api.ResultIteratorGetConfidence(handle, level);
         }
 
         public string GetText(PageIteratorLevel level)
         {
-            return Interop.TessApi.ResultIteratorGetUTF8Text(handle, level);
+            return TesseractPrimitives.Api.ResultIteratorGetUTF8Text(handle, level);
         }
     }
 }

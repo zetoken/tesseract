@@ -71,41 +71,17 @@
     <Compile Include="..\Tesseract.Net20\EngineMode.cs">
       <Link>EngineMode.cs</Link>
     </Compile>
-    <Compile Include="..\Tesseract.Net20\ImageFormat.cs">
-      <Link>ImageFormat.cs</Link>
-    </Compile>
-    <Compile Include="..\Tesseract.Net20\Interop\BaseApi.cs">
-      <Link>Interop\BaseApi.cs</Link>
-    </Compile>
-    <Compile Include="..\Tesseract.Net20\Interop\Constants.cs">
-      <Link>Interop\Constants.cs</Link>
-    </Compile>
-    <Compile Include="..\Tesseract.Net20\Interop\LeptonicaApi.cs">
-      <Link>Interop\LeptonicaApi.cs</Link>
-    </Compile>
-    <Compile Include="..\Tesseract.Net20\Interop\MarshalHelper.cs">
-      <Link>Interop\MarshalHelper.cs</Link>
-    </Compile>
     <Compile Include="..\Tesseract.Net20\LoadLibraryException.cs">
       <Link>LoadLibraryException.cs</Link>
     </Compile>
     <Compile Include="..\Tesseract.Net20\MathHelper.cs">
       <Link>MathHelper.cs</Link>
     </Compile>
-    <Compile Include="..\Tesseract.Net20\Orientation.cs">
-      <Link>Orientation.cs</Link>
-    </Compile>
     <Compile Include="..\Tesseract.Net20\Page.cs">
       <Link>Page.cs</Link>
     </Compile>
     <Compile Include="..\Tesseract.Net20\PageIterator.cs">
       <Link>PageIterator.cs</Link>
-    </Compile>
-    <Compile Include="..\Tesseract.Net20\PageIteratorLevel.cs">
-      <Link>PageIteratorLevel.cs</Link>
-    </Compile>
-    <Compile Include="..\Tesseract.Net20\PageSegMode.cs">
-      <Link>PageSegMode.cs</Link>
     </Compile>
     <Compile Include="..\Tesseract.Net20\Pix.cs">
       <Link>Pix.cs</Link>
@@ -124,9 +100,6 @@
     </Compile>
     <Compile Include="..\Tesseract.Net20\PixToBitmapConverter.cs">
       <Link>PixToBitmapConverter.cs</Link>
-    </Compile>
-    <Compile Include="..\Tesseract.Net20\PolyBlockType.cs">
-      <Link>PolyBlockType.cs</Link>
     </Compile>
     <Compile Include="..\Tesseract.Net20\Properties\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
@@ -149,12 +122,12 @@
     <Compile Include="..\Tesseract.Net20\TesseractException.cs">
       <Link>TesseractException.cs</Link>
     </Compile>
-    <Compile Include="..\Tesseract.Net20\TextLineOrder.cs">
-      <Link>TextLineOrder.cs</Link>
-    </Compile>
-    <Compile Include="..\Tesseract.Net20\WritingDirection.cs">
-      <Link>WritingDirection.cs</Link>
-    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Tesseract.Wrapper\Tesseract.Wrapper.csproj">
+      <Project>{f7baa6d4-35e7-4130-a4bf-6fb885626b99}</Project>
+      <Name>Tesseract.Wrapper</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

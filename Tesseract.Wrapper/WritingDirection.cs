@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Tesseract
+namespace Tesseract.Wrapper
 {
     public enum WritingDirection
     {

@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tesseract.Wrapper;
 
 namespace Tesseract.Tests.Leptonica
 {
@@ -36,7 +37,7 @@ namespace Tesseract.Tests.Leptonica
                 Assert.That(BitmapHelper.GetBPP(source), Is.EqualTo(depth));
                 using (var dest = bitmapConverter.Convert(source)) {
                     var destFilename = String.Format("BitmapToPix_{0}_{1}bpp.tif", pixType, depth);
-                    dest.Save(Path.Combine(ResultsDirectory, destFilename), ImageFormat.Tiff);
+                    dest.Save(Path.Combine(ResultsDirectory, destFilename), Tesseract.Wrapper.ImageFormat.Tiff);
 
                     AssertAreEquivalent(source, dest, true);
                 }

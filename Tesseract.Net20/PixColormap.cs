@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Tesseract.Wrapper;
 
 namespace Tesseract
 {
@@ -26,7 +27,7 @@ namespace Tesseract
                 throw new ArgumentOutOfRangeException("depth", "Depth must be 1, 2, 4, or 8 bpp.");
             }
 
-            var handle = Interop.LeptonicaApi.pixcmapCreate(depth);
+            var handle = LeptonicaPrimitives.Api.pixcmapCreate(depth);
             if (handle == IntPtr.Zero) {
                 throw new InvalidOperationException("Failed to create colormap.");
             }
@@ -41,7 +42,7 @@ namespace Tesseract
             if (levels < 2 || levels > (2 << depth))
                 throw new ArgumentOutOfRangeException("levels", "Depth must be 2 and 2^depth (inclusive).");
 
-            var handle = Interop.LeptonicaApi.pixcmapCreateLinear(depth, levels);
+            var handle = LeptonicaPrimitives.Api.pixcmapCreateLinear(depth, levels);
             if (handle == IntPtr.Zero) {
                 throw new InvalidOperationException("Failed to create colormap.");
             }
@@ -54,7 +55,7 @@ namespace Tesseract
                 throw new ArgumentOutOfRangeException("depth", "Depth must be 1, 2, 4, or 8 bpp.");
             }
 
-            var handle = Interop.LeptonicaApi.pixcmapCreateRandom(depth, firstIsBlack ? 1 : 0, lastIsWhite ? 1 : 0);
+            var handle = LeptonicaPrimitives.Api.pixcmapCreateRandom(depth, firstIsBlack ? 1 : 0, lastIsWhite ? 1 : 0);
             if (handle == IntPtr.Zero) {
                 throw new InvalidOperationException("Failed to create colormap.");
             }
@@ -68,48 +69,48 @@ namespace Tesseract
 
         public int Depth
         {
-            get { return Interop.LeptonicaApi.pixcmapGetDepth(handle); }
+            get { return LeptonicaPrimitives.Api.pixcmapGetDepth(handle); }
         }
 
         public int Count
         {
-            get { return Interop.LeptonicaApi.pixcmapGetCount(handle); }
+            get { return LeptonicaPrimitives.Api.pixcmapGetCount(handle); }
         }
 
         public int FreeCount
         {
-            get { return Interop.LeptonicaApi.pixcmapGetFreeCount(handle); }
+            get { return LeptonicaPrimitives.Api.pixcmapGetFreeCount(handle); }
         }
 
         public bool AddColor(PixColor color)
         {
-            return Interop.LeptonicaApi.pixcmapAddColor(handle, color.Red, color.Green, color.Blue) == 0;
+            return LeptonicaPrimitives.Api.pixcmapAddColor(handle, color.Red, color.Green, color.Blue) == 0;
         }
 
         public bool AddNewColor(PixColor color, out int index)
         {
-            return Interop.LeptonicaApi.pixcmapAddNewColor(handle, color.Red, color.Green, color.Blue, out index) == 0;
+            return LeptonicaPrimitives.Api.pixcmapAddNewColor(handle, color.Red, color.Green, color.Blue, out index) == 0;
         }
 
         public bool AddNearestColor(PixColor color, out int index)
         {
-            return Interop.LeptonicaApi.pixcmapAddNearestColor(handle, color.Red, color.Green, color.Blue, out index) == 0;
+            return LeptonicaPrimitives.Api.pixcmapAddNearestColor(handle, color.Red, color.Green, color.Blue, out index) == 0;
         }
 
         public bool AddBlackOrWhite(int color, out int index)
         {
-            return Interop.LeptonicaApi.pixcmapAddBlackOrWhite(handle, color, out index) == 0;
+            return LeptonicaPrimitives.Api.pixcmapAddBlackOrWhite(handle, color, out index) == 0;
         }
 
         public bool SetBlackOrWhite(bool setBlack, bool setWhite)
         {
-            return Interop.LeptonicaApi.pixcmapSetBlackAndWhite(handle, setBlack ? 1 : 0, setWhite ? 1 : 0) == 0;
+            return LeptonicaPrimitives.Api.pixcmapSetBlackAndWhite(handle, setBlack ? 1 : 0, setWhite ? 1 : 0) == 0;
         }
 
         public bool IsUsableColor(PixColor color)
         {
             int usable;
-            if (Interop.LeptonicaApi.pixcmapUsableColor(handle, color.Red, color.Green, color.Blue, out usable) == 0) {
+            if (LeptonicaPrimitives.Api.pixcmapUsableColor(handle, color.Red, color.Green, color.Blue, out usable) == 0) {
                 return usable == 1;
             } else {
                 throw new InvalidOperationException("Failed to detect if color was usable or not.");
@@ -118,7 +119,7 @@ namespace Tesseract
 
         public void Clear()
         {
-            if (Interop.LeptonicaApi.pixcmapClear(handle) != 0) {
+            if (LeptonicaPrimitives.Api.pixcmapClear(handle) != 0) {
                 throw new InvalidOperationException("Failed to clear color map.");                
             }
         }
@@ -128,7 +129,7 @@ namespace Tesseract
             get
             {
                 int color;
-                if (Interop.LeptonicaApi.pixcmapGetColor32(handle, index, out color) == 0) {
+                if (LeptonicaPrimitives.Api.pixcmapGetColor32(handle, index, out color) == 0) {
                     return PixColor.FromRgb((uint)color);
                 } else {
                     throw new InvalidOperationException("Failed to retrieve color.");
@@ -136,7 +137,7 @@ namespace Tesseract
             }
             set
             {
-                if (Interop.LeptonicaApi.pixcmapResetColor(handle, index, value.Red, value.Green, value.Blue) != 0) {
+                if (LeptonicaPrimitives.Api.pixcmapResetColor(handle, index, value.Red, value.Green, value.Blue) != 0) {
                     throw new InvalidOperationException("Failed to reset color.");                    
                 }
             }
@@ -144,7 +145,7 @@ namespace Tesseract
 
         public void Dispose()
         {
-            Interop.LeptonicaApi.pixcmapDestroy(ref handle);
+            LeptonicaPrimitives.Api.pixcmapDestroy(ref handle);
         }
     }
 }

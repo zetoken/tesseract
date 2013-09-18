@@ -2,93 +2,97 @@
 using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using Tesseract.Wrapper;
 
 namespace Tesseract
 {
-	/// <summary>
-	/// Description of Engine.
-	/// </summary>
-	public class TesseractEngine : DisposableBase
-	{
-		private IntPtr handle;
+    /// <summary>
+    /// Description of Engine.
+    /// </summary>
+    public class TesseractEngine : DisposableBase, IEngineHandle
+    {
         private int processCount = 0;
-				
-		public TesseractEngine(string datapath, string language, EngineMode engineMode = EngineMode.Default)
+
+        public TesseractEngine(string datapath, string language, EngineMode engineMode = EngineMode.Default)
         {
             DefaultPageSegMode = PageSegMode.Auto;
-			handle = Interop.TessApi.BaseApiCreate();
-			
-			Initialise(datapath, language, engineMode);
-		}
+            Handle = TesseractPrimitives.Api.BaseApiCreate();
+
+            Initialise(datapath, language, engineMode);
+        }
 
         public IntPtr Handle
         {
-            get { return handle; }
+            get;
+            private set;
         }
-		
-		public string Version
-		{
-            get { return Interop.TessApi.GetVersion(); }
-		}
-		
-		#region Config
-		
-		public bool SetVariable(string name, string value)
-		{
-            return Interop.TessApi.BaseApiSetVariable(handle, name, value) != 0;
-		}
-		
-		public bool SetDebugVariable(string name, string value)
-		{
-            return Interop.TessApi.BaseApiSetDebugVariable(handle, name, value) != 0;
-		}
-		
-		public bool TryGetBoolVariable(string name, out bool value)
-		{
-			int val;
-            if (Interop.TessApi.BaseApiGetIntVariable(handle, name, out val) != 0) {
-				value = (val != 0);
-				return true;
-			} else {
-				value = false;
-				return false;
-			}
-		}
-		
-		public bool TryGetIntVariable(string name, out int value)
-		{
-			return Interop.TessApi.BaseApiGetIntVariable(handle, name, out value) != 0;
-		}
-		
-		public bool TryGetDoubleVariable(string name, out double value)
-		{
-            return Interop.TessApi.BaseApiGetDoubleVariable(handle, name, out value) != 0;
-		}	
-		
-		public bool TryGetStringVariable(string name, out string value)
-		{
-            return Interop.TessApi.BaseApiGetVariableAsString(handle, name, out value) != 0;
-		}
+
+        public string Version
+        {
+            get { return TesseractPrimitives.Api.GetVersion(); }
+        }
+
+        #region Config
+
+        public bool SetVariable(string name, string value)
+        {
+            return TesseractPrimitives.Api.BaseApiSetVariable(this, name, value) != 0;
+        }
+
+        public bool SetDebugVariable(string name, string value)
+        {
+            return TesseractPrimitives.Api.BaseApiSetDebugVariable(this, name, value) != 0;
+        }
+
+        public bool TryGetBoolVariable(string name, out bool value)
+        {
+            int val;
+            if (TesseractPrimitives.Api.BaseApiGetIntVariable(this, name, out val) != 0)
+            {
+                value = (val != 0);
+                return true;
+            }
+            else
+            {
+                value = false;
+                return false;
+            }
+        }
+
+        public bool TryGetIntVariable(string name, out int value)
+        {
+            return TesseractPrimitives.Api.BaseApiGetIntVariable(this, name, out value) != 0;
+        }
+
+        public bool TryGetDoubleVariable(string name, out double value)
+        {
+            return TesseractPrimitives.Api.BaseApiGetDoubleVariable(this, name, out value) != 0;
+        }
+
+        public bool TryGetStringVariable(string name, out string value)
+        {
+            return TesseractPrimitives.Api.BaseApiGetVariableAsString(this, name, out value) != 0;
+        }
 
         public PageSegMode DefaultPageSegMode
         {
             get;
             set;
         }
-		
-		#endregion
-		
-		private void Initialise(string datapath, string language, EngineMode engineMode)
-		{
-            if (Interop.TessApi.BaseApiInit(handle, datapath, language, (int)engineMode, IntPtr.Zero, 0, IntPtr.Zero, 0, IntPtr.Zero, 0) != 0)
+
+        #endregion
+
+        private void Initialise(string datapath, string language, EngineMode engineMode)
+        {
+            if (TesseractPrimitives.Api.BaseApiInit(this, datapath, language, (int)engineMode, IntPtr.Zero, 0, IntPtr.Zero, 0, IntPtr.Zero, 0) != 0)
             {
-				// Special case logic to handle cleaning up as init has already released the handle if it fails.
-				handle = IntPtr.Zero;
-				GC.SuppressFinalize(this);
-				
-				throw new TesseractException("Failed to initialise tesseract engine.");
-			}
-		}
+                // Special case logic to handle cleaning up as init has already released the handle if it fails.
+                Handle = IntPtr.Zero;
+                GC.SuppressFinalize(this);
+
+                throw new TesseractException("Failed to initialise tesseract engine.");
+            }
+        }
 
         public Page Process(Pix image, PageSegMode? pageSegMode = null)
         {
@@ -113,9 +117,9 @@ namespace Tesseract
 
             processCount++;
 
-            Interop.TessApi.BaseAPISetPageSegMode(handle, pageSegMode.HasValue ? pageSegMode.Value : DefaultPageSegMode);
-            Interop.TessApi.BaseApiSetImage(handle, image.Handle);
-            Interop.TessApi.BaseApiSetRectangle(handle, region.X1, region.Y1, region.Width, region.Height);
+            TesseractPrimitives.Api.BaseApiSetPageSegMode(this, pageSegMode.HasValue ? pageSegMode.Value : DefaultPageSegMode);
+            TesseractPrimitives.Api.BaseApiSetImage(this, image.Handle);
+            TesseractPrimitives.Api.BaseApiSetRectangle(this, region.X1, region.Y1, region.Width, region.Height);
 
             var page = new Page(this);
             page.Disposed += OnIteratorDisposed;
@@ -152,16 +156,18 @@ namespace Tesseract
         /// <returns></returns>
         public Page Process(Bitmap image, Rect region, PageSegMode? pageSegMode = null)
         {
-            using (var pix = PixConverter.ToPix(image)) {
+            using (var pix = PixConverter.ToPix(image))
+            {
                 return Process(pix, region, pageSegMode);
             }
         }
 
         protected override void Dispose(bool disposing)
         {
-            if (handle != IntPtr.Zero) {
-                Interop.TessApi.BaseApiDelete(handle);
-                handle = IntPtr.Zero;
+            if (Handle != IntPtr.Zero)
+            {
+                TesseractPrimitives.Api.BaseApiDelete(this);
+                Handle = IntPtr.Zero;
             }
         }
 
@@ -173,5 +179,5 @@ namespace Tesseract
         }
 
         #endregion
-	}
+    }
 }

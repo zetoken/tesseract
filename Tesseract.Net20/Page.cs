@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text;
+using Tesseract.Wrapper;
 
 namespace Tesseract
 {
@@ -19,33 +20,33 @@ namespace Tesseract
        
         public PageIterator AnalyseLayout()
         {
-            var resultIteratorHandle = Interop.TessApi.BaseAPIAnalyseLayout(Engine.Handle);
+            var resultIteratorHandle = TesseractPrimitives.Api.BaseApiAnalyseLayout(Engine);
             return new PageIterator(resultIteratorHandle);
         }
 
         public ResultIterator GetIterator()
         {
             Recognize();
-            var resultIteratorHandle = Interop.TessApi.BaseApiGetIterator(Engine.Handle);
+            var resultIteratorHandle = TesseractPrimitives.Api.BaseApiGetIterator(Engine);
             return new ResultIterator(resultIteratorHandle);
         }
 
         public string GetText()
         {
             Recognize();
-            return Interop.TessApi.BaseAPIGetUTF8Text(Engine.Handle);
+            return TesseractPrimitives.Api.BaseApiGetUTF8Text(Engine);
         }
 
         public string GetHOCRText(int pageNum)
         {
             Recognize();
-            return Interop.TessApi.BaseAPIGetHOCRText(Engine.Handle, pageNum);
+            return TesseractPrimitives.Api.BaseApiGetHOCRText(Engine, pageNum);
         }
 
         public float GetMeanConfidence()
         {
             Recognize();
-            return Interop.TessApi.BaseAPIMeanTextConf(Engine.Handle) / 100.0f;
+            return TesseractPrimitives.Api.BaseApiMeanTextConf(Engine) / 100.0f;
         }
 
 
@@ -55,7 +56,8 @@ namespace Tesseract
         private void Recognize()
         {            
             if (!runRecognitionPhase) {
-                if (Interop.TessApi.BaseApiRecognize(Engine.Handle, IntPtr.Zero) != 0) {
+                if (TesseractPrimitives.Api.BaseApiRecognize(Engine, IntPtr.Zero) != 0)
+                {
                     throw new InvalidOperationException("Recognition of image failed.");
                 }
                 runRecognitionPhase = true;
@@ -66,7 +68,7 @@ namespace Tesseract
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
-                Interop.TessApi.BaseAPIClear(Engine.Handle);
+                TesseractPrimitives.Api.BaseApiClear(Engine);
             }
         }
     }
